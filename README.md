@@ -6,7 +6,7 @@ A decentralized AI agent service on the Cardano blockchain, implementing the **M
 
 ## 🎥 Video Demo
 
-[Watch Demo Video](./assets/demo-vid.mp4)
+[Watch Demo Video](https://www.youtube.com/watch?v=BETiE8vQ8wo)
 
 ---
 
@@ -391,3 +391,4 @@ For issues or questions:
 ## 📄 License
 
 This project implements the MIP-003 standard for decentralized AI agent payments on Cardano.
+
