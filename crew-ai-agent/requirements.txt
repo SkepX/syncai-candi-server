@@ -1,0 +1,18 @@
+# FastAPI and Web Server
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+python-dotenv==1.1.0
+
+# AI/ML Libraries
+anthropic==0.75.0
+crewai==0.80.0
+crewai-tools>=0.14.0
+
+# Data Validation
+pydantic==2.11.1
+
+# HTTP Requests
+requests==2.32.3
+
+# Additional dependencies for production
+gunicorn==21.2.0

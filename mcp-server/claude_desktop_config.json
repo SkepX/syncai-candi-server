@@ -1,0 +1,16 @@
+{
+   "mcpServers": {
+       "cardano_mcp": {
+           "command": "uv",
+           "args": [
+               "--directory",
+               "D:\\Cardano\\Cardano-MCP",
+               "run",
+               "server.py"
+           ],
+           "env": {
+               "TRANSPORT": "stdio"
+           }
+       }
+   }
+}

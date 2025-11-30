@@ -1,0 +1,83 @@
+version: '3.8'
+
+services:
+  crew-ai-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cardano-crew-agent
+    ports:
+      - "8000:8000"
+    environment:
+      # Payment Service Configuration
+      - PAYMENT_SERVICE_URL=${PAYMENT_SERVICE_URL:-http://localhost:3001/api/v1}
+      - PAYMENT_API_KEY=${PAYMENT_API_KEY}
+
+      # Agent Configuration
+      - AGENT_IDENTIFIER=${AGENT_IDENTIFIER}
+      - PAYMENT_AMOUNT=${PAYMENT_AMOUNT:-2000000}
+      - PAYMENT_UNIT=${PAYMENT_UNIT:-lovelace}
+      - SELLER_VKEY=${SELLER_VKEY}
+
+      # Network Configuration
+      - NETWORK=${NETWORK:-Preprod}
+      - PORT=8000
+      - HOST=0.0.0.0
+
+      # AI API Keys
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+
+      # MCP Server URL
+      - CARDANO_MCP_URL=${CARDANO_MCP_URL:-http://mcp-server:4324}
+
+    volumes:
+      # Mount .env file for local development (optional)
+      - ./.env:/app/.env:ro
+      # Mount logs directory if you want persistent logs
+      - ./logs:/app/logs
+
+    networks:
+      - cardano-network
+
+    restart: unless-stopped
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+    depends_on:
+      mcp-server:
+        condition: service_healthy
+
+  # Optional: Include MCP server if you want to run it together
+  mcp-server:
+    build:
+      context: ../mcp-server
+      dockerfile: Dockerfile
+    container_name: cardano-mcp-server
+    ports:
+      - "4324:4324"
+    environment:
+      - PORT=4324
+      - HOST=0.0.0.0
+    networks:
+      - cardano-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4324/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+networks:
+  cardano-network:
+    driver: bridge
+
+volumes:
+  logs:
+    driver: local

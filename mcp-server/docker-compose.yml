@@ -1,0 +1,9 @@
+name: cardano-mcp
+services:
+  mcp_server:
+    build: .
+    ports:
+      - "${PORT:-8000}:${PORT:-8000}"
+    env_file:
+      - .env
+    restart: unless-stopped
